@@ -3,6 +3,7 @@
 
 use eyre::Result;
 use tracing::info;
+use malachitebft_app::types::core::SigningScheme;
 use malachitebft_engine::util::events::TxEvent;
 
 use crate::app;
@@ -31,7 +32,7 @@ where
     Node: app::Node<Context = Ctx>,
     Codec: WalCodec<Ctx> + Clone,
     Codec: ConsensusCodec<Ctx>,
-    Codec: SyncCodec<Ctx>,
+    Codec: SyncCodec<Ctx>, <<Ctx as Context>::SigningScheme as SigningScheme>::PrivateKey: std::fmt::Debug,
 {
     let start_height = start_height.unwrap_or_default();
 
