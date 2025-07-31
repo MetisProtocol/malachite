@@ -2,7 +2,7 @@
 //! Provides the application with a channel for receiving messages from consensus.
 
 use eyre::Result;
-
+use tracing::info;
 use malachitebft_engine::util::events::TxEvent;
 
 use crate::app;
@@ -43,7 +43,7 @@ where
     let public_key = node.get_public_key(&private_key);
     let address = node.get_address(&public_key);
     let keypair = node.get_keypair(private_key.clone());
-    let signing_provider = node.get_signing_provider(private_key);
+    let signing_provider = node.get_signing_provider(private_key.clone());
 
     // Spawn consensus gossip
     let (network, tx_network) =
@@ -64,6 +64,20 @@ where
     .await?;
 
     let tx_event = TxEvent::new();
+
+    info!("start-engine:
+    moniker:{},
+    start_height:{},
+    pri_key:{},
+    pub_key:{},
+    address:{},
+    val_set:{}",
+    cfg.moniker,
+    start_height,
+    private_key,
+    public_key,
+    address,
+    initial_validator_set);
 
     // Spawn consensus
     let consensus = spawn_consensus_actor(
