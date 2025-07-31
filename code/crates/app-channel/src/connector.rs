@@ -55,11 +55,11 @@ where
         msg: HostMsg<Ctx>,
         _state: &mut (),
     ) -> Result<(), ActorProcessingErr> {
-        info!("fsc-test: Connector handle_msg!!! msg:{:?}", msg);
+        info!("metis-test: Connector handle_msg!!! msg:{:?}", msg);
 
         match msg {
             HostMsg::ConsensusReady(consensus_ref) => {
-                info!("fsc-test: HostMsg::ConsensusReady");
+                info!("metis-test: HostMsg::ConsensusReady");
 
                 let (reply, rx) = oneshot::channel();
 
@@ -73,7 +73,7 @@ where
                 round,
                 proposer,
             } => {
-                info!("fsc-test: HostMsg::StartedRound");
+                info!("metis-test: HostMsg::StartedRound");
 
                 self.sender
                     .send(AppMsg::StartedRound {
@@ -90,7 +90,7 @@ where
                 timeout,
                 reply_to,
             } => {
-                info!("fsc-test: HostMsg::GetValue");
+                info!("metis-test: HostMsg::GetValue");
 
                 let (reply, rx) = oneshot::channel();
 
@@ -112,7 +112,7 @@ where
                 value_id,
                 reply_to,
             } => {
-                info!("fsc-test: HostMsg::ExtendVote");
+                info!("metis-test: HostMsg::ExtendVote");
 
                 let (reply, rx) = oneshot::channel();
 
@@ -135,7 +135,7 @@ where
                 extension,
                 reply_to,
             } => {
-                info!("fsc-test: HostMsg::VerifyVoteExtension");
+                info!("metis-test: HostMsg::VerifyVoteExtension");
 
                 let (reply, rx) = oneshot::channel();
 
@@ -159,7 +159,7 @@ where
                 address,
                 value_id,
             } => {
-                info!("fsc-test: HostMsg::RestreamValue");
+                info!("metis-test: HostMsg::RestreamValue");
 
                 self.sender
                     .send(AppMsg::RestreamProposal {
@@ -173,7 +173,7 @@ where
             }
 
             HostMsg::GetHistoryMinHeight { reply_to } => {
-                info!("fsc-test: HostMsg::GetHistoryMinHeight");
+                info!("metis-test: HostMsg::GetHistoryMinHeight");
 
                 let (reply, rx) = oneshot::channel();
 
@@ -189,7 +189,7 @@ where
                 part,
                 reply_to,
             } => {
-                info!("fsc-test: HostMsg::ReceivedProposalPart");
+                info!("metis-test: HostMsg::ReceivedProposalPart");
 
                 let (reply, rx) = oneshot::channel();
 
@@ -203,7 +203,7 @@ where
             }
 
             HostMsg::GetValidatorSet { height, reply_to } => {
-                info!("fsc-test: HostMsg::GetValidatorSet");
+                info!("metis-test: HostMsg::GetValidatorSet");
 
                 let (reply, rx) = oneshot::channel();
 
@@ -219,7 +219,7 @@ where
                 extensions,
                 consensus,
             } => {
-                info!("fsc-test: HostMsg::Decided");
+                info!("metis-test: HostMsg::Decided");
 
                 let (reply, rx) = oneshot::channel();
 
@@ -235,7 +235,7 @@ where
             }
 
             HostMsg::GetDecidedValue { height, reply_to } => {
-                info!("fsc-test: HostMsg::GetDecidedValue");
+                info!("metis-test: HostMsg::GetDecidedValue");
 
                 let (reply, rx) = oneshot::channel();
 
@@ -253,7 +253,7 @@ where
                 value_bytes,
                 reply_to,
             } => {
-                info!("fsc-test: HostMsg::ProcessSyncedValue");
+                info!("metis-test: HostMsg::ProcessSyncedValue");
 
                 let (reply, rx) = oneshot::channel();
 
@@ -271,13 +271,13 @@ where
             }
 
             HostMsg::PeerJoined { peer_id } => {
-                info!("fsc-test: HostMsg::PeerJoined");
+                info!("metis-test: HostMsg::PeerJoined");
 
                 self.sender.send(AppMsg::PeerJoined { peer_id }).await?;
             }
 
             HostMsg::PeerLeft { peer_id } => {
-                info!("fsc-test: HostMsg::PeerLeft");
+                info!("metis-test: HostMsg::PeerLeft");
 
                 self.sender.send(AppMsg::PeerLeft { peer_id }).await?;
             }
@@ -310,7 +310,7 @@ where
         msg: Self::Msg,
         state: &mut Self::State,
     ) -> Result<(), ActorProcessingErr> {
-        info!("fsc-test: Connector handle!!!");
+        info!("metis-test: Connector handle!!!");
         if let Err(e) = self.handle_msg(myself, msg, state).await {
             tracing::error!("Error processing message: {e}");
         }

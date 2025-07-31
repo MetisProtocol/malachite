@@ -9,7 +9,7 @@ use libp2p::request_response;
 use ractor::port::OutputPortSubscriber;
 use ractor::{Actor, ActorProcessingErr, ActorRef, OutputPort, RpcReplyPort};
 use tokio::task::JoinHandle;
-use tracing::{error, trace};
+use tracing::{error, info, trace};
 
 use malachitebft_sync::{
     self as sync, InboundRequestId, OutboundRequestId, RawMessage, Request, Response,
@@ -215,6 +215,7 @@ where
             return Ok(());
         };
 
+        info!("metis-test: net-work msg:{:?}", msg);
         match msg {
             Msg::Subscribe(subscriber) => subscriber.subscribe_to_port(output_port),
 
