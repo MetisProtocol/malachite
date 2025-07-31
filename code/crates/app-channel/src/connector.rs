@@ -55,7 +55,7 @@ where
         msg: HostMsg<Ctx>,
         _state: &mut (),
     ) -> Result<(), ActorProcessingErr> {
-        info!("fsc-test: Connector handle_msg!!! msg:{}", msg);
+        info!("fsc-test: Connector handle_msg!!! msg:{:?}", msg);
 
         match msg {
             HostMsg::ConsensusReady(consensus_ref) => {

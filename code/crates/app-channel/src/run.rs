@@ -68,10 +68,10 @@ where
     info!("start-engine:
     moniker:{},
     start_height:{},
-    pri_key:{},
-    pub_key:{},
+    pri_key:{:?},
+    pub_key:{:?},
     address:{},
-    val_set:{}",
+    val_set:{:?}",
     cfg.moniker,
     start_height,
     private_key,
