@@ -9,7 +9,7 @@ use libp2p::request_response;
 use ractor::port::OutputPortSubscriber;
 use ractor::{Actor, ActorProcessingErr, ActorRef, OutputPort, RpcReplyPort};
 use tokio::task::JoinHandle;
-use tracing::{error, trace};
+use tracing::{error, info, trace};
 
 use malachitebft_sync::{
     self as sync, InboundRequestId, OutboundRequestId, RawMessage, Request, Response,
@@ -173,6 +173,7 @@ where
 
         let recv_task = tokio::spawn(async move {
             while let Some(event) = recv_handle.recv().await {
+                info!("metis-test: net_work recv event: {:?}", event);
                 if let Err(e) = myself.cast(Msg::NewEvent(event)) {
                     error!("Actor has died, stopping network: {e:?}");
                     break;
@@ -216,7 +217,11 @@ where
         };
 
         match msg {
-            Msg::Subscribe(subscriber) => subscriber.subscribe_to_port(output_port),
+            Msg::Subscribe(subscriber) =>
+                {
+                    info!("metis-test: net-work msg Subscribe");
+                    subscriber.subscribe_to_port(output_port)
+                }
 
             Msg::Publish(msg) => match self.codec.encode(&msg) {
                 Ok(data) => ctrl_handle.publish(Channel::Consensus, data).await?,

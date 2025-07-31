@@ -3,7 +3,7 @@
 use ractor::{async_trait, Actor, ActorProcessingErr, ActorRef, SpawnErr};
 use tokio::sync::mpsc;
 use tokio::sync::oneshot;
-
+use tracing::info;
 use malachitebft_engine::host::HostMsg;
 
 use crate::app::types::core::Context;
@@ -55,8 +55,12 @@ where
         msg: HostMsg<Ctx>,
         _state: &mut (),
     ) -> Result<(), ActorProcessingErr> {
+        info!("metis-test: Connector handle_msg!!! msg:{:?}", msg);
+
         match msg {
             HostMsg::ConsensusReady(consensus_ref) => {
+                info!("metis-test: HostMsg::ConsensusReady");
+
                 let (reply, rx) = oneshot::channel();
 
                 self.sender.send(AppMsg::ConsensusReady { reply }).await?;
@@ -69,6 +73,8 @@ where
                 round,
                 proposer,
             } => {
+                info!("metis-test: HostMsg::StartedRound");
+
                 self.sender
                     .send(AppMsg::StartedRound {
                         height,
@@ -84,6 +90,8 @@ where
                 timeout,
                 reply_to,
             } => {
+                info!("metis-test: HostMsg::GetValue");
+
                 let (reply, rx) = oneshot::channel();
 
                 self.sender
@@ -104,6 +112,8 @@ where
                 value_id,
                 reply_to,
             } => {
+                info!("metis-test: HostMsg::ExtendVote");
+
                 let (reply, rx) = oneshot::channel();
 
                 self.sender
@@ -125,6 +135,8 @@ where
                 extension,
                 reply_to,
             } => {
+                info!("metis-test: HostMsg::VerifyVoteExtension");
+
                 let (reply, rx) = oneshot::channel();
 
                 self.sender
@@ -147,6 +159,8 @@ where
                 address,
                 value_id,
             } => {
+                info!("metis-test: HostMsg::RestreamValue");
+
                 self.sender
                     .send(AppMsg::RestreamProposal {
                         height,
@@ -159,6 +173,8 @@ where
             }
 
             HostMsg::GetHistoryMinHeight { reply_to } => {
+                info!("metis-test: HostMsg::GetHistoryMinHeight");
+
                 let (reply, rx) = oneshot::channel();
 
                 self.sender
@@ -173,6 +189,8 @@ where
                 part,
                 reply_to,
             } => {
+                info!("metis-test: HostMsg::ReceivedProposalPart");
+
                 let (reply, rx) = oneshot::channel();
 
                 self.sender
@@ -185,6 +203,8 @@ where
             }
 
             HostMsg::GetValidatorSet { height, reply_to } => {
+                info!("metis-test: HostMsg::GetValidatorSet");
+
                 let (reply, rx) = oneshot::channel();
 
                 self.sender
@@ -199,6 +219,8 @@ where
                 extensions,
                 consensus,
             } => {
+                info!("metis-test: HostMsg::Decided");
+
                 let (reply, rx) = oneshot::channel();
 
                 self.sender
@@ -213,6 +235,8 @@ where
             }
 
             HostMsg::GetDecidedValue { height, reply_to } => {
+                info!("metis-test: HostMsg::GetDecidedValue");
+
                 let (reply, rx) = oneshot::channel();
 
                 self.sender
@@ -229,6 +253,8 @@ where
                 value_bytes,
                 reply_to,
             } => {
+                info!("metis-test: HostMsg::ProcessSyncedValue");
+
                 let (reply, rx) = oneshot::channel();
 
                 self.sender
@@ -245,10 +271,14 @@ where
             }
 
             HostMsg::PeerJoined { peer_id } => {
+                info!("metis-test: HostMsg::PeerJoined");
+
                 self.sender.send(AppMsg::PeerJoined { peer_id }).await?;
             }
 
             HostMsg::PeerLeft { peer_id } => {
+                info!("metis-test: HostMsg::PeerLeft");
+
                 self.sender.send(AppMsg::PeerLeft { peer_id }).await?;
             }
         };
@@ -280,6 +310,7 @@ where
         msg: Self::Msg,
         state: &mut Self::State,
     ) -> Result<(), ActorProcessingErr> {
+        info!("metis-test: Connector handle!!!");
         if let Err(e) = self.handle_msg(myself, msg, state).await {
             tracing::error!("Error processing message: {e}");
         }
