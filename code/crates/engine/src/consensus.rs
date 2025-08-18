@@ -1094,7 +1094,7 @@ where
         myself: ActorRef<Msg<Ctx>>,
         _args: (),
     ) -> Result<State<Ctx>, ActorProcessingErr> {
-        info!("metis-test: Consensus pre_start!!!");
+        debug!("Consensus pre_start!!!");
 
         self.network
             .cast(NetworkMsg::Subscribe(Box::new(myself.clone())))?;
@@ -1113,7 +1113,7 @@ where
         _myself: ActorRef<Msg<Ctx>>,
         state: &mut State<Ctx>,
     ) -> Result<(), ActorProcessingErr> {
-        info!("metis-test: Consensus post_start!!!");
+        debug!("Consensus post_start!!!");
 
         state.timers.cancel_all();
         Ok(())
@@ -1133,7 +1133,7 @@ where
         msg: Msg<Ctx>,
         state: &mut State<Ctx>,
     ) -> Result<(), ActorProcessingErr> {
-        info!("metis-test: Consensus handle!!!");
+        debug!("Consensus handle!!!");
 
         if let Err(e) = self.handle_msg(myself, state, msg).await {
             error!("Error when handling message: {e:?}");

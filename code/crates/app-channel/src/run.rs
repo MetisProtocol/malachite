@@ -69,13 +69,11 @@ where
     info!("start-engine:
     moniker:{},
     start_height:{},
-    pri_key:{:?},
     pub_key:{:?},
     address:{},
     val_set:{:?}",
     cfg.moniker,
     start_height,
-    private_key,
     public_key,
     address,
     initial_validator_set);
